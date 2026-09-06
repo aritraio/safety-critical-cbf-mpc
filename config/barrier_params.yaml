@@ -1,0 +1,28 @@
+# Phase-2/3 barrier parameters (parsed in Phase 2; kept here so configs are
+# versioned together with the vehicle + LQR tuning from Phase 1).
+road_boundary:
+  lane_margin: 3.5        # [m] |e_y| <= lane_margin  (h_road = margin^2 - e_y^2)
+  kappa_road: 2.0         # class-K slope gamma(h) = kappa * h
+
+obstacle:
+  a: 4.0                  # [m] longitudinal semi-axis (incl. vehicle footprint)
+  b: 2.0                  # [m] lateral semi-axis
+  kappa_obs: 2.0
+
+drift_envelope:
+  kappa_drift: 3.0
+  # h_drift = (mu*g)^2 - (vx*r)^2 ; mu adapted online by friction UKF (Phase 4)
+
+gap_barrier:
+  t_headway: 1.2       # [s] desired time headway (car-following)
+  d_min: 4.0           # [m] standstill gap
+  kappa_gap: 2.0       # class-K slope gamma(h) = kappa * h
+  lateral_gate: 2.0    # [m] row applies only if |dy| < gate (near-lane)
+
+cbf_qp:
+  H_diag: [1.0, 0.5]      # control-effort weights on [delta, ax]
+  slack_weight: 1000.0    # exact-penalty weight on every barrier slack xi
+  use_slack: true         # false => legacy hard-barrier rows (ablation)
+  use_slew: true          # hard slew-rate box around u_prev
+  dt: 0.01                # [s] controller step for slew bounds
+  solve_hz: 100.0

@@ -1,0 +1,17 @@
+# MPC lateral tracker tuning (error state e = [e_y, edot_y, e_psi, edot_psi]).
+# Cost: sum (e'Qe + R d^2 + Rd (d - d_prev)^2) + eN' P eN, P from discrete ARE.
+Q_diag: [8.0, 1.0, 6.0, 1.0]
+R: 1.0
+R_delta: 0.5
+dt: 0.05                # [s] model step; horizon N = 15 -> T = 0.75 s
+
+# Longitudinal PI speed tracker (same law as LQR nominal)
+longitudinal:
+  kp: 0.8
+  ki: 0.15
+  integrator_max: 2.0
+
+target_speed: 20.0      # [m/s]
+max_lateral_error_clamp: 5.0
+max_heading_error_clamp: 0.6
+rebuild_dvx: 0.5        # [m/s] re-condense threshold on speed change

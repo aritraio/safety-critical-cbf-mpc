@@ -1,0 +1,164 @@
+# RViz2 visualization for the CBF safety-filter stack.
+# Topics: /cbf_markers (MarkerArray: ego footprint, obstacle ellipses,
+# road margins, friction-ellipse status), /odom (nav_msgs/Odometry).
+Panels:
+  - Class: rviz_common/Displays
+    Help Height: 84
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /GlobalOptions1
+        - /Status1
+      Splitter Ratio: 0.5
+    Tree Height: 672
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.5886790156364441
+  - Class: rviz_common/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.03
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 40
+      Reference Frame: map
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: CBF Markers
+      Namespaces:
+        barrier_contours: true
+        drift_status: true
+        ego_footprint: true
+        obstacles: true
+        road_margins: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /cbf_markers
+      Value: true
+    - Class: rviz_default_plugins/Odometry
+      Covariance:
+        Orientation:
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Show Axes: false
+          Show Covariance: false
+          Value: true
+        Position:
+          Color: 204; 51; 204
+          Color Style: Unique
+          Frame: Local
+          Scale: 1
+          Show Axes: false
+          Show Covariance: false
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 100
+      Name: Odometry
+      Position Tolerance: 0.1
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.1
+        Color: 255; 25; 0
+        Head Length: 0.3
+        Head Radius: 0.1
+        Shaft Length: 1
+        Shaft Radius: 0.05
+        Value: Axes
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /odom
+      Unreliable: false
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+      Hide Inactive Objects: true
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+    - Class: rviz_default_plugins/SetInitialPose
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /initialpose
+    - Class: rviz_default_plugins/SetGoal
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /goal_pose
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 40
+      Focal Point:
+        X: 20
+        Y: 0
+        Z: 0
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05
+      Name: Current View
+      Near Clip Distance: 0.01
+      Pitch: 0.9
+      Target Frame: map
+      Yaw: 0.5
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 900
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd000000040000000000000167000002a5fc0200000008fb0000001200530065006c0065006300740069006f006e0000002b000002a50000009a0000005dfb000000120054006f006f006c002000500072006f007000650072007400690065007300fc0200000008fb00000012005600690065007700730000000292000002780000009e000002a5fc0200000008fb000000120044006900730070006c006100790073000000031e00000041000000a900fffffffb0000000a0044006900730070006c006100790073000000000000000000000903000002a50000009afc0200000008fb0000001200530065006c0065006300740069006f006e00000003c8000000dd000000010000000200000002a50000009afc0200000008fb000000120054006f006f006c002000500072006f00700065007200740069006500730000000292000002780000009e000002a5fc0200000008fb0000001200560069006500770073000000016c000002a500000009a0000000dcfc0200000008fb0000001200570069006e0064006f0077002000470065006f006d0065007400720079000000000000020000000900000090000000000000000000000900000000a9000000ff
+  Selection:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 1400

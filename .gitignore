@@ -1,0 +1,41 @@
+# Build directories
+build/
+build_py/
+install/
+log/
+.cache/
+compile_commands.json
+
+# Simulation & Benchmarking artifacts
+runs/
+figs/
+*.csv
+*.jsonl
+
+# Binaries, libraries, and objects
+*.o
+*.a
+*.so
+*.dylib
+*.out
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+env/
+*.egg-info/
+
+# Operating System & IDEs
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+*.clangd

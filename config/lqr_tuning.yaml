@@ -1,0 +1,15 @@
+# LQR lateral tracker tuning (error state e = [e_y, e_psi, v_y, r]).
+# Cost: J = int (e' Q e + R delta^2) dt.
+Q_diag: [8.0, 6.0, 1.0, 1.0]
+R: 1.0
+
+# Longitudinal PI speed tracker
+longitudinal:
+  kp: 0.8
+  ki: 0.15
+  integrator_max: 2.0     # [m/s^2] anti-windup clamp on integral term
+
+target_speed: 20.0        # [m/s]
+use_feedforward: true     # steady-state understeer feedforward delta_ff
+max_lateral_error_clamp: 5.0   # [m] saturate e_y entering the LQR law (robustness)
+max_heading_error_clamp: 0.6   # [rad]
