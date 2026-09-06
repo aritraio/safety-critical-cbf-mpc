@@ -168,18 +168,38 @@ Substituting the Lie derivatives yields the **ECBF linear inequality constraint 
 $$L_g L_f h(\mathbf{x})\mathbf{u} \ge -L_f^2 h(\mathbf{x}) - (p_1 + p_2)\dot{h}(\mathbf{x}) - p_1 p_2 h(\mathbf{x})$$
 
 ### 4.4 The 4 Safety Barriers Implemented in this Project
+
 1. **Roadway Boundary Containment (Relative Degree 2):**
-   $$h_{\text{road}}(\mathbf{x}) = d_{\text{lane\_margin}}^2 - e_y(\mathbf{x})^2 \ge 0$$
-   Prevents lateral road departure.
+
+$$
+h_{\mathrm{road}}(\mathbf{x}) = d_{\mathrm{margin}}^2 - e_y(\mathbf{x})^2 \ge 0
+$$
+
+Prevents lateral road departure.
+
 2. **Ellipsoidal Moving Obstacle Avoidance (Relative Degree 2):**
-   $$h_{\text{obs}}(\mathbf{x}) = \frac{(x - x_{\text{obs}})^2}{a^2} + \frac{(y - y_{\text{obs}})^2}{b^2} - 1 \ge 0$$
-   Guarantees collision avoidance with a safety buffer ($a = \text{length}/2 + 1.0\,\text{m}$, $b = \text{width}/2 + 0.6\,\text{m}$).
+
+$$
+h_{\mathrm{obs}}(\mathbf{x}) = \frac{(x - x_{\mathrm{obs}})^2}{a^2} + \frac{(y - y_{\mathrm{obs}})^2}{b^2} - 1 \ge 0
+$$
+
+Guarantees collision avoidance with a safety buffer ($a = \text{length}/2 + 1.0\,\text{m}$, $b = \text{width}/2 + 0.6\,\text{m}$).
+
 3. **Dynamic Drift & Yaw Stability Envelope (Relative Degree 1):**
-   $$h_{\text{drift}}(\mathbf{x}, \mu) = (\mu g)^2 - (v_x r)^2 \ge 0$$
-   Since $\dot{r}$ immediately contains $\delta$, $L_g h \neq 0$ ($k=1$). Keeps lateral acceleration within the friction circle limit to prevent spin-outs and rollover.
+
+$$
+h_{\mathrm{drift}}(\mathbf{x}, \mu) = (\mu g)^2 - (v_x r)^2 \ge 0
+$$
+
+Since $\dot{r}$ immediately contains $\delta$, $L_g h \neq 0$ ($k=1$). Keeps lateral acceleration within the friction circle limit to prevent spin-outs and rollover.
+
 4. **Headway / Gap Braking Barrier:**
-   $$h_{\text{gap}}(\mathbf{x}) = \Delta x - T_{\text{hw}} v_x - d_{\min} \ge 0$$
-   Enforces a longitudinal time headway $T_{\text{hw}}$. Eliminates the "scrub-steering" perverse incentive where an obstacle directly ahead could cause violent swerving if longitudinal braking is not explicitly incentivized.
+
+$$
+h_{\mathrm{gap}}(\mathbf{x}) = \Delta x - T_{\mathrm{hw}} v_x - d_{\min} \ge 0
+$$
+
+Enforces a longitudinal time headway $T_{\mathrm{hw}}$. Eliminates the "scrub-steering" perverse incentive where an obstacle directly ahead could cause violent swerving if longitudinal braking is not explicitly incentivized.
 
 ---
 
@@ -428,7 +448,7 @@ If the safety filter waits until the state is on the boundary $\partial \mathcal
 We address this by:
 1. Formulating slew-rate bounds directly inside the QP optimization problem:
    $$\mathbf{u}_{\text{prev}} - \Delta \mathbf{u}_{\max} \le \mathbf{u} \le \mathbf{u}_{\text{prev}} + \Delta \mathbf{u}_{\max}$$
-2. Inflating the barrier buffers ($a, b, d_{\text{lane\_margin}}$) by a velocity-dependent margin $\Delta d_{\text{slew}} = \frac{v_x \Delta t}{2}$ to account for the actuation lag time.
+2. Inflating the barrier buffers ($a, b, d_{\mathrm{margin}}$) by a velocity-dependent margin $\Delta d_{\text{slew}} = \frac{v_x \Delta t}{2}$ to account for the actuation lag time.
 
 ---
 

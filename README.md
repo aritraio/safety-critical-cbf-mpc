@@ -21,43 +21,87 @@ An active safety motion control framework for high-speed autonomous ground vehic
 * **State Vector:** $\mathbf{x} = [x, y, \psi, v_x, v_y, r]^\top \in \mathbb{R}^6$ (inertial coordinates, heading angle, body longitudinal/lateral velocity, yaw rate).
 * **Control Input:** $\mathbf{u} = [\delta, a_x]^\top \in \mathbb{R}^2$ (front steering angle, longitudinal acceleration).
 
-* **Lateral Tire Forces (Pacejka Magic Formula):**
-  $$F_{yf} = D \sin\left(C \arctan\left(B\alpha_f - E(B\alpha_f - \arctan(B\alpha_f))\right)\right)$$
-  $$F_{yr} = D \sin\left(C \arctan\left(B\alpha_r - E(B\alpha_r - \arctan(B\alpha_r))\right)\right)$$
-  where front and rear slip angles are given by:
-  $$\alpha_f = \delta - \arctan\left(\frac{v_y + l_f r}{v_x}\right), \quad \alpha_r = -\arctan\left(\frac{v_y - l_r r}{v_x}\right)$$
+**Lateral Tire Forces (Pacejka Magic Formula):**
 
-* **Equations of Motion:**
-  $$m(\dot{v}_x - v_y r) = 2F_{xf} \cos\delta - 2F_{yf} \sin\delta + 2F_{xr}$$
-  $$m(\dot{v}_y + v_x r) = 2F_{xf} \sin\delta + 2F_{yf} \cos\delta + 2F_{yr}$$
-  $$I_z \dot{r} = 2l_f(F_{xf}\sin\delta + F_{yf}\cos\delta) - 2l_r F_{yr}$$
+$$
+F_{yf} = D \sin\left(C \arctan\left(B\alpha_f - E(B\alpha_f - \arctan(B\alpha_f))\right)\right)
+$$
+
+$$
+F_{yr} = D \sin\left(C \arctan\left(B\alpha_r - E(B\alpha_r - \arctan(B\alpha_r))\right)\right)
+$$
+
+where front and rear slip angles are given by:
+
+$$
+\alpha_f = \delta - \arctan\left(\frac{v_y + l_f r}{v_x}\right), \quad \alpha_r = -\arctan\left(\frac{v_y - l_r r}{v_x}\right)
+$$
+
+**Equations of Motion:**
+
+$$
+m(\dot{v}_x - v_y r) = 2F_{xf} \cos\delta - 2F_{yf} \sin\delta + 2F_{xr}
+$$
+
+$$
+m(\dot{v}_y + v_x r) = 2F_{xf} \sin\delta + 2F_{yf} \cos\delta + 2F_{yr}
+$$
+
+$$
+I_z \dot{r} = 2l_f(F_{xf}\sin\delta + F_{yf}\cos\delta) - 2l_r F_{yr}
+$$
 
 ### 2. Control Barrier Functions (CBFs) & Nagumo Invariance
-* A safe operating set $\mathcal{C}$ is defined by the 0-superlevel set of a continuously differentiable barrier function $h(\mathbf{x}): \mathbb{R}^n \to \mathbb{R}$:
-  $$\mathcal{C} = \{\mathbf{x} \in \mathbb{R}^n \mid h(\mathbf{x}) \ge 0\}$$
+A safe operating set $\mathcal{C}$ is defined by the 0-superlevel set of a continuously differentiable barrier function $h(\mathbf{x}): \mathbb{R}^n \to \mathbb{R}$:
+
+$$
+\mathcal{C} = \{\mathbf{x} \in \mathbb{R}^n \mid h(\mathbf{x}) \ge 0\}
+$$
 
 * **Barrier 1: Roadway Boundary Containment:**
-  $$h_{\text{road}}(\mathbf{x}) = d_{\text{lane\_margin}}^2 - e_y(\mathbf{x})^2 \ge 0$$
+
+$$
+h_{\mathrm{road}}(\mathbf{x}) = d_{\mathrm{margin}}^2 - e_y(\mathbf{x})^2 \ge 0
+$$
 
 * **Barrier 2: Ellipsoidal Obstacle Collision Avoidance:**
-  $$h_{\text{obs}}(\mathbf{x}) = \frac{(x - x_{\text{obs}})^2}{a^2} + \frac{(y - y_{\text{obs}})^2}{b^2} - 1 \ge 0$$
+
+$$
+h_{\mathrm{obs}}(\mathbf{x}) = \frac{(x - x_{\mathrm{obs}})^2}{a^2} + \frac{(y - y_{\mathrm{obs}})^2}{b^2} - 1 \ge 0
+$$
 
 * **Barrier 3: Dynamic Drift / Stability Envelope:**
-  $$h_{\text{drift}}(\mathbf{x}) = (\mu g)^2 - (v_x r)^2 \ge 0$$
+
+$$
+h_{\mathrm{drift}}(\mathbf{x}) = (\mu g)^2 - (v_x r)^2 \ge 0
+$$
 
 * **Forward Invariance Condition (Nagumo):**
-  For the set $\mathcal{C}$ to remain forward invariant under closed-loop control, the control input $\mathbf{u}$ must satisfy:
-  $$\sup_{\mathbf{u} \in \mathcal{U}} \left[ L_f h(\mathbf{x}) + L_g h(\mathbf{x})\mathbf{u} + \gamma(h(\mathbf{x})) \right] \ge 0$$
-  where $L_f h = \frac{\partial h}{\partial \mathbf{x}}\mathbf{f}(\mathbf{x})$, $L_g h = \frac{\partial h}{\partial \mathbf{x}}\mathbf{g}(\mathbf{x})$ are Lie derivatives, and $\gamma(h) = \kappa h$ ($\kappa > 0$) is an extended class $\mathcal{K}$ function.
+For the set $\mathcal{C}$ to remain forward invariant under closed-loop control, the control input $\mathbf{u}$ must satisfy:
+
+$$
+\sup_{\mathbf{u} \in \mathcal{U}} \left[ L_f h(\mathbf{x}) + L_g h(\mathbf{x})\mathbf{u} + \gamma(h(\mathbf{x})) \right] \ge 0
+$$
+
+where $L_f h = \frac{\partial h}{\partial \mathbf{x}}\mathbf{f}(\mathbf{x})$, $L_g h = \frac{\partial h}{\partial \mathbf{x}}\mathbf{g}(\mathbf{x})$ are Lie derivatives, and $\gamma(h) = \kappa h$ ($\kappa > 0$) is an extended class $\mathcal{K}$ function.
 
 ### 3. Real-Time CBF-QP Safety Filter
-The nominal tracking controller (LQR or MPC) proposes an unconstrained or performance-focused control input $\mathbf{u}_{\text{nom}}$. The online safety filter minimally adjusts this command while strictly enforcing safety:
+The nominal tracking controller (LQR or MPC) proposes an unconstrained or performance-focused control input $\mathbf{u}_{\mathrm{nom}}$. The online safety filter minimally adjusts this command while strictly enforcing safety:
 
-$$\mathbf{u}^* = \arg\min_{\mathbf{u}} \frac{1}{2}\|\mathbf{u} - \mathbf{u}_{\text{nom}}\|_{\mathbf{H}}^2$$
+$$
+\mathbf{u}^* = \arg\min_{\mathbf{u}} \frac{1}{2}\|\mathbf{u} - \mathbf{u}_{\mathrm{nom}}\|_{\mathbf{H}}^2
+$$
 
 **Subject to:**
-$$L_f h_i(\mathbf{x}) + L_g h_i(\mathbf{x})\mathbf{u} \ge -\gamma(h_i(\mathbf{x})), \quad \forall i \in \{1, \dots, M\}$$
-$$\mathbf{u}_{\min} \le \mathbf{u} \le \mathbf{u}_{\max}$$
+
+$$
+L_f h_i(\mathbf{x}) + L_g h_i(\mathbf{x})\mathbf{u} \ge -\gamma(h_i(\mathbf{x})), \quad \forall i \in \{1, \dots, M\}
+$$
+
+$$
+\mathbf{u}_{\min} \le \mathbf{u} \le \mathbf{u}_{\max}
+$$
+
 This convex Quadratic Program is solved deterministically in $< 1\,\text{ms}$ using OSQP.
 
 ### 4. Adaptive Friction Estimation via UKF
